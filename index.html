@@ -1,0 +1,2411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VRA GATE ENTRY</title>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script> -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Outfit:wght@300;400;500;600;700&family=DM+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Pinterest-ready Warm Terracotta & Sage Palette */
+            --cream:       #faf7f2;
+            --cream-deep:  #f2ede4;
+            --parchment:   #e8dfd0;
+            --terracotta:  #c1624a;
+            --terra-light: #d4856e;
+            --terra-dark:  #9e4933;
+            --terra-glow:  rgba(193,98,74,0.18);
+            --sage:        #6b8c7a;
+            --sage-light:  #8faa9c;
+            --sage-bg:     rgba(107,140,122,0.12);
+            --sage-border: rgba(107,140,122,0.35);
+            --gold:        #c9a84c;
+            --gold-light:  #e2c46e;
+            --gold-bg:     rgba(201,168,76,0.12);
+            --ink:         #2c2420;
+            --ink-soft:    #5a4a43;
+            --ink-muted:   #8a7a72;
+            --ink-faint:   #c4b5ad;
+            --card-bg:     rgba(255,255,255,0.82);
+            --glass-bg:    rgba(250,247,242,0.75);
+            --shadow-warm: 0 32px 64px -12px rgba(44,36,32,0.22), 0 0 0 1px rgba(193,98,74,0.08);
+            --shadow-float:0 8px 32px rgba(44,36,32,0.14);
+            --radius-sm:   10px;
+            --radius:      16px;
+            --radius-lg:   28px;
+            --radius-xl:   40px;
+
+            /* Blocked/Error */
+            --red:         #b94444;
+            --red-bg:      #fdf0ee;
+            --red-border:  rgba(185,68,68,0.3);
+            --blue:        #3b6ea5;
+            --blue-bg:     rgba(59,110,165,0.1);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: url('https://drive.google.com/thumbnail?id=1uPF1S_LOW4fEJMyhrNvmdC3OCfUdO0TO&sz=s2000') center center / cover no-repeat;
+            background-color: var(--cream); /* fallback while the image loads */
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--ink);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ── BACKGROUND TEXTURE ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(193,98,74,0.10) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 80% at 80% 80%, rgba(107,140,122,0.10) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 40% at 60% 20%, rgba(201,168,76,0.07) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating decorative orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: orbDrift 12s ease-in-out infinite alternate;
+            filter: blur(60px);
+            opacity: 0.45;
+        }
+        .orb-1 { width: 340px; height: 340px; top: -80px; left: -80px; background: radial-gradient(circle, #e8c4b0, transparent 70%); animation-delay: 0s; }
+        .orb-2 { width: 280px; height: 280px; bottom: -60px; right: -60px; background: radial-gradient(circle, #b8d4c4, transparent 70%); animation-delay: -4s; }
+        .orb-3 { width: 200px; height: 200px; top: 40%; left: 5%; background: radial-gradient(circle, #e8d4a0, transparent 70%); animation-delay: -8s; }
+
+        @keyframes orbDrift {
+            0%   { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, 20px) scale(1.08); }
+        }
+
+        /* ── CARD ── */
+        .card {
+            position: relative;
+            z-index: 1;
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 800px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-warm);
+            border: 1px solid rgba(232,223,208,0.7);
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transform-style: preserve-3d;
+            animation: cardEntrance 0.9s cubic-bezier(0.16,1,0.3,1) forwards;
+        }
+
+        @keyframes cardEntrance {
+            from { opacity:0; transform: translateY(40px) rotateX(8deg) scale(0.96); }
+            to   { opacity:1; transform: translateY(0) rotateX(0deg) scale(1); }
+        }
+
+        /* 3D card hover tilt */
+        .card:hover { transform: perspective(1000px) rotateX(1deg) rotateY(0.5deg); transition: transform 0.3s ease; }
+
+        /* ── HEADER ── */
+        .card-header {
+            padding: 16px 32px 14px;
+            border-bottom: 1px solid rgba(196,181,173,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(250,247,242,0.4) 100%);
+            position: relative;
+        }
+
+        /* Decorative header accent line */
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--terracotta), var(--gold), var(--sage));
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+        }
+
+        .header-content { display: flex; align-items: center; gap: 14px; }
+
+        .header-logo-wrap {
+            width: 52px; height: 52px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(193,98,74,0.15), rgba(201,168,76,0.1));
+            border: 1.5px solid rgba(193,98,74,0.2);
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(193,98,74,0.15), inset 0 1px 0 rgba(255,255,255,0.6);
+            flex-shrink: 0;
+        }
+        .header-logo {
+            height: 40px; width: 40px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .header-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--ink);
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+        .header-text p {
+            font-size: 0.75rem;
+            color: var(--ink-muted);
+            margin-top: 3px;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+        }
+
+        /* Step pill */
+        .step-pill {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-family: 'DM Mono', monospace;
+            color: var(--terracotta);
+            background: rgba(193,98,74,0.1);
+            padding: 4px 10px;
+            border-radius: 99px;
+            border: 1px solid rgba(193,98,74,0.2);
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        .btn-start-over {
+            background: rgba(196,181,173,0.2);
+            color: var(--ink-soft);
+            border: 1.5px solid rgba(196,181,173,0.4);
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+        }
+        .btn-start-over:hover { background: rgba(193,98,74,0.1); border-color: var(--terracotta); color: var(--terracotta); transform: rotate(-30deg); }
+        /* .btn-start-over svg { width: 17px; height: 17px; } */
+                .btn-start-over svg { width: 17px; height: 17px; }
+
+        /* ── HEADER RIGHT SIDE ── */
+        .header-right { display: flex; align-items: center; gap: 16px; }
+        .kiosk-time-box { display: flex; flex-direction: column; align-items: flex-end; }
+        .kiosk-clock { font-family: 'DM Mono', monospace; font-size: 1.15rem; font-weight: 700; color: var(--ink); line-height: 1.1; }
+        .kiosk-date { font-size: 0.72rem; color: var(--ink-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .gate-ready-badge {
+            background: rgb(16 185 129);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #000000;
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: flex; align-items: center; gap: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* ── BODY & FOOTER ── */
+        .card-body { padding: 20px 32px 24px; }
+
+        .card-footer {
+            padding: 12px 28px;
+            border-top: 1px solid rgba(196,181,173,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(232,223,208,0.18);
+        }
+        .footer-label { font-size: 0.72rem; color: var(--ink-muted); font-family: 'DM Mono', monospace; letter-spacing: 0.04em; }
+        .status-dot { display: flex; align-items: center; gap: 7px; font-size: 1.42rem; font-weight: 600; color: var(--sage); }
+        .status-dot::before {
+            content: '';
+            width: 7px; height: 7px;
+            background: var(--sage);
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px rgba(107,140,122,0.25);
+            animation: pulse-sage 2s ease infinite;
+        }
+        @keyframes pulse-sage {
+            0%,100% { box-shadow: 0 0 0 3px rgba(107,140,122,0.25); }
+            50%      { box-shadow: 0 0 0 6px rgba(107,140,122,0.08); }
+        }
+
+        /* ── SHARED ANIMATIONS ── */
+        @keyframes slideUp {
+            from { opacity:0; transform:translateY(20px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity:0; }
+            to   { opacity:1; }
+        }
+        @keyframes spin {
+            to { transform:rotate(360deg); }
+        }
+        @keyframes shimmer {
+            0%   { background-position: -200% center; }
+            100% { background-position:  200% center; }
+        }
+        @keyframes floatIn {
+            from { opacity:0; transform:translateY(12px) scale(0.97); }
+            to   { opacity:1; transform:translateY(0) scale(1); }
+        }
+        @keyframes bounceIn {
+            0%   { transform: scale(0.5); opacity:0; }
+            60%  { transform: scale(1.08); }
+            80%  { transform: scale(0.97); }
+            100% { transform: scale(1); opacity:1; }
+        }
+        @keyframes waveRing {
+            0%   { box-shadow: 0 0 0 0 rgba(193,98,74,0.4); }
+            70%  { box-shadow: 0 0 0 14px rgba(193,98,74,0); }
+            100% { box-shadow: 0 0 0 0 rgba(193,98,74,0); }
+        }
+
+        .screen { animation: slideUp 0.45s cubic-bezier(0.16,1,0.3,1); }
+
+        /* ── SCREEN TITLES ── */
+        .screen-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 2px;
+            color: var(--ink);
+            line-height: 1.3;
+            text-align: center;
+        }
+        .screen-sub {
+            font-size: 0.88rem;
+            color: var(--ink-muted);
+            margin-bottom: 26px;
+            line-height: 1.6;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        /* ══ SCREEN 1 — LANGUAGE ══ */
+        .lang-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 26px;
+        }
+        .lang-btn {
+            padding: 14px 10px 12px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--ink-soft);
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(254, 215, 170, 0.15));
+            border: 1.5px solid rgba(249, 115, 22, 0.4);
+            transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(8px);
+        }
+        .lang-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--terracotta), var(--gold));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+        }
+        .lang-btn .flag-emoji, .lang-btn .lang-name, .lang-btn .lang-native { position: relative; z-index: 1; }
+        .lang-btn .flag-emoji { font-size: 1.6rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+        .lang-btn .lang-name  { font-size: 0.82rem; font-weight: 700; }
+        .lang-btn .lang-native{ font-size: 0.72rem; font-weight: 600; opacity: 0.75; }
+
+        .lang-btn:hover {
+            border-color: var(--terracotta);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.2);
+            color: var(--terracotta);
+        }
+        .lang-btn.selected {
+            border-color: transparent !important;
+            color: #fff !important;
+            transform: translateY(-3px) scale(1.04);
+            box-shadow: 0 16px 32px rgba(193,98,74,0.28) !important;
+        }
+        .lang-btn.selected::before { opacity: 1; }
+        .lang-btn.selected .lang-native { opacity: 0.85; }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+        .divider::before,.divider::after {
+            content:'';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(196,181,173,0.5), transparent);
+        }
+        .divider span {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--ink-faint);
+            font-family: 'DM Mono', monospace;
+            letter-spacing: 0.12em;
+        }
+
+        /* Voice button */
+        .voice-btn {
+            width: 100%;
+            padding: 18px 22px;
+            background: rgba(255,255,255,0.65);
+            color: var(--ink);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: 1.5px solid rgba(196,181,173,0.5);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(8px);
+        }
+        .voice-btn:hover {
+            border-color: var(--terracotta);
+            background: rgba(193,98,74,0.06);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(193,98,74,0.12);
+        }
+        .voice-btn.listening {
+            border-color: var(--terracotta);
+            background: rgba(193,98,74,0.08);
+            color: var(--terracotta);
+            animation: waveRing 1.5s ease infinite;
+        }
+        .mic-icon { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+
+        .voice-status {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--ink-muted);
+            text-align: center;
+            min-height: 20px;
+            font-family: 'DM Mono', monospace;
+            margin-bottom: 8px;
+        }
+
+        .confirm-bar {
+            background: linear-gradient(135deg, var(--gold-bg), rgba(255,255,255,0.3));
+            border: 1.5px solid rgba(201,168,76,0.35);
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+            font-size: 0.88rem;
+            color: var(--ink-soft);
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 12px;
+            backdrop-filter: blur(8px);
+            animation: floatIn 0.3s ease;
+        }
+        .confirm-bar button {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+        .confirm-yes { background: var(--sage); color: #fff; }
+        .confirm-yes:hover { background: #5a7a68; transform: scale(1.03); }
+        .confirm-no  { background: rgba(196,181,173,0.35); color: var(--ink-soft); }
+        .confirm-no:hover  { background: rgba(196,181,173,0.6); }
+
+        /* ══ SCREEN 2 — VERIFICATION ══ */
+        .field-group { margin-bottom: 22px; }
+
+        .field-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            margin-bottom: 9px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .field-req { color: var(--terracotta); }
+
+        .field-input {
+            width: 100%;
+            padding: 15px 18px;
+            border: 1.5px solid rgba(196,181,173,0.5);
+            border-radius: var(--radius-sm);
+            font-family: 'DM Mono', monospace;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--ink);
+            background: rgba(255,255,255,0.65);
+            transition: all 0.3s ease;
+            outline: none;
+            letter-spacing: 0.04em;
+            backdrop-filter: blur(8px);
+        }
+        .field-input::placeholder {
+            color: var(--ink-faint);
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 0;
+            font-weight: 400;
+            font-size: 0.9rem;
+        }
+        .field-input:focus {
+            border-color: var(--terracotta);
+            background: rgba(255,255,255,0.9);
+            box-shadow: 0 0 0 4px rgba(193,98,74,0.1), 0 4px 12px rgba(193,98,74,0.08);
+            transform: translateY(-1px);
+        }
+        .field-input.error   { border-color: var(--red); background: var(--red-bg); box-shadow: 0 0 0 3px rgba(185,68,68,0.1); }
+        .field-input.success { border-color: var(--sage); background: var(--sage-bg); box-shadow: 0 0 0 3px rgba(107,140,122,0.1); }
+        .field-hint  { font-size: 0.75rem; color: var(--ink-muted); margin-top: 7px; line-height: 1.5; font-weight: 400; }
+        .field-error { font-size: 0.78rem; font-weight: 600; color: var(--red); margin-top: 7px; display:none; }
+        .field-error.show { display: block; animation: floatIn 0.2s ease; }
+
+        .dl-counter {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--ink-muted);
+            text-align: right;
+            margin-top: 7px;
+            font-family: 'DM Mono', monospace;
+            transition: color 0.2s;
+        }
+        .dl-counter.valid   { color: var(--sage); }
+        .dl-counter.invalid { color: var(--terracotta); }
+
+        /* Primary button */
+        .btn-primary {
+            width: 100%;
+            padding: 17px 24px;
+            background: linear-gradient(135deg, var(--terracotta), var(--terra-dark));
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 28px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(193,98,74,0.3), 0 2px 4px rgba(193,98,74,0.2), inset 0 1px 0 rgba(255,255,255,0.15);
+        }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 0; height: 0;
+            background: rgba(255,255,255,0.25);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
+            opacity: 0;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 16px 36px rgba(193,98,74,0.4), 0 4px 8px rgba(193,98,74,0.2);
+        }
+        .btn-primary:active {
+            transform: translateY(1px) scale(0.99);
+        }
+        .btn-primary:active::after {
+            width: 300px; height: 300px; opacity: 0;
+        }
+        .btn-primary:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 12px rgba(193,98,74,0.15);
+        }
+
+        /* Verify status */
+        .verify-status {
+            margin-top: 16px;
+            padding: 14px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem;
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            animation: floatIn 0.3s ease;
+        }
+        .verify-status.loading { display:flex; background: var(--blue-bg); color: var(--blue); border: 1px solid rgba(59,110,165,0.2); }
+        .verify-status.success { display:flex; background: var(--sage-bg); color: var(--sage); border: 1px solid var(--sage-border); }
+        .verify-status.error   { display:flex; background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+        .spinner { width: 16px; height: 16px; border: 2.5px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
+
+        /* ══ SCREEN 3 — SCANNER ══ */
+        .driver-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--sage);
+            background: var(--sage-bg);
+            padding: 7px 14px;
+            border-radius: 99px;
+            margin-bottom: 20px;
+            border: 1.5px solid var(--sage-border);
+            font-family: 'DM Mono', monospace;
+        }
+        .driver-chip::before {
+            content: '✓';
+            width: 18px; height: 18px;
+            background: var(--sage);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* Scanner wrapper */
+        .scanner-wrap {
+            position: relative;
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: linear-gradient(135deg, #f5f0e8, #ede4d6);
+            margin-bottom: 20px;
+            border: 1.5px solid rgba(196,181,173,0.4);
+            box-shadow: 0 8px 24px rgba(44,36,32,0.1), inset 0 1px 0 rgba(255,255,255,0.6);
+        }
+
+        /* Animated corner brackets */
+        .corner { position:absolute; width:28px; height:28px; z-index:10; pointer-events:none; }
+        .corner-tl { top:12px; left:12px;  border-top:3px solid var(--terracotta); border-left:3px solid var(--terracotta);  border-radius: 6px 0 0 0; }
+        .corner-tr { top:12px; right:12px; border-top:3px solid var(--terracotta); border-right:3px solid var(--terracotta); border-radius: 0 6px 0 0; }
+        .corner-bl { bottom:12px; left:12px;  border-bottom:3px solid var(--terracotta); border-left:3px solid var(--terracotta);  border-radius: 0 0 0 6px; }
+        .corner-br { bottom:12px; right:12px; border-bottom:3px solid var(--terracotta); border-right:3px solid var(--terracotta); border-radius: 0 0 6px 0; }
+
+        /* Scan line animation */
+        .scan-line {
+            position: absolute;
+            left: 16px; right: 16px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--terracotta), transparent);
+            z-index: 9;
+            animation: scanLine 2.5s ease-in-out infinite;
+            box-shadow: 0 0 8px rgba(193,98,74,0.5);
+        }
+        @keyframes scanLine {
+            0%   { top: 20%; opacity: 0.8; }
+            50%  { top: 80%; opacity: 1; }
+            100% { top: 20%; opacity: 0.8; }
+        }
+
+        #reader { width: 100%; border: none; }
+        #reader__dashboard_section_swaplink { display:none !important; }
+        #reader__dashboard_section_csr span[id$="_msg"] { display:none !important; }
+        div#reader__dashboard_section_csr img { display:none !important; }
+        #reader__header_message { display:none !important; }
+        #reader__status_span { font-family:'DM Mono',monospace !important; font-size:0.78rem !important; color:var(--ink-muted) !important; }
+        #reader button {
+            width:100%; padding:15px 20px;
+            background: linear-gradient(135deg, var(--terracotta), var(--terra-dark)) !important;
+            color:#fff !important;
+            font-family:'Outfit',sans-serif;
+            font-size:0.95rem; font-weight:700;
+            border:none !important;
+            border-radius:var(--radius-sm);
+            cursor:pointer;
+            box-shadow: 0 6px 18px rgba(193,98,74,0.3);
+        }
+
+        .scan-hint {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 0.84rem;
+            font-weight: 500;
+            color: var(--ink-soft);
+            margin-top: 16px;
+            padding: 13px 16px;
+            background: rgba(255,255,255,0.5);
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(196,181,173,0.3);
+            backdrop-filter: blur(6px);
+        }
+        .scan-hint .tag {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.66rem;
+            font-weight: 700;
+            background: rgba(201,168,76,0.2);
+            color: var(--gold);
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(201,168,76,0.3);
+            white-space: nowrap;
+            letter-spacing: 0.08em;
+        }
+
+        /* Result container */
+        #result-container { display:none; animation: slideUp 0.4s cubic-bezier(0.16,1,0.3,1); }
+        .result-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            margin-bottom: 10px;
+        }
+        .data-card {
+            background: rgba(255,255,255,0.55);
+            border: 1.5px solid rgba(196,181,173,0.4);
+            border-radius: var(--radius);
+            padding: 16px 18px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(8px);
+        }
+        #qr-data { font-family:'DM Mono',monospace; font-size:0.9rem; font-weight:500; color:var(--ink); word-break:break-all; line-height:1.6; }
+
+        /* SAP Result */
+        .sap-result {
+            border-radius: var(--radius);
+            padding: 18px 22px;
+            margin-bottom: 18px;
+            display: none;
+            animation: floatIn 0.3s ease;
+            border: 1.5px solid;
+        }
+        .sap-result.show { display: block; }
+        .sap-result-header { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+        .sap-result-icon {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            font-weight: 700;
+        }
+        .sap-result-title { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; }
+        .sap-result-msg  { font-size: 0.86rem; font-weight:500; line-height:1.5; margin-top:4px; font-family:'DM Mono',monospace; opacity:0.85; }
+        .sap-result-code { font-size:0.7rem; font-weight:600; font-family:'DM Mono',monospace; opacity:0.55; margin-top:6px; letter-spacing:0.04em; text-transform:uppercase; }
+
+        .sap-result.status-A { background: var(--sage-bg); border-color: var(--sage-border); color: var(--sage); }
+        .sap-result.status-A .sap-result-icon { background: var(--sage); color:#fff; }
+        .sap-result.status-B { background: var(--red-bg); border-color: var(--red-border); color: var(--red); }
+        .sap-result.status-B .sap-result-icon { background: var(--red); color:#fff; }
+        .sap-result.status-C { background: var(--gold-bg); border-color: rgba(201,168,76,0.35); color: #8a6a20; }
+        .sap-result.status-C .sap-result-icon { background: var(--gold); color:#fff; }
+        .sap-result.status-sync { background: var(--blue-bg); border-color: rgba(59,110,165,0.25); color: var(--blue); }
+        .sap-result.status-sync .sap-result-icon { background: var(--blue); color:#fff; }
+
+        /* Countdown */
+        .reset-countdown { display:none; margin-bottom:16px; }
+        .reset-countdown.show { display:block; animation: floatIn 0.3s ease; }
+        .countdown-label { font-size:0.78rem; font-weight:600; color:var(--ink-muted); font-family:'DM Mono',monospace; margin-bottom:8px; text-align:center; }
+        .countdown-track { height:4px; background:rgba(196,181,173,0.4); border-radius:99px; overflow:hidden; }
+        .countdown-bar { height:100%; background:linear-gradient(90deg, var(--terracotta), var(--gold)); border-radius:99px; }
+
+        /* ══ TOKEN POPUP ══ */
+        #token-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(44,36,32,0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        #token-overlay.show { display: flex; }
+
+        .token-modal {
+            background: var(--cream);
+            border-radius: var(--radius-xl);
+            padding: 44px 36px 36px;
+            width: 100%;
+            max-width: 460px;
+            text-align: center;
+            box-shadow: 0 40px 80px -12px rgba(44,36,32,0.45), 0 0 0 1px rgba(232,223,208,0.5);
+            animation: bounceIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(232,223,208,0.7);
+        }
+
+        .token-modal::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--sage), var(--gold), var(--terracotta));
+        }
+        .token-modal.error-state::before {
+            background: linear-gradient(90deg, var(--red), var(--terracotta));
+        }
+
+        /* Decorative circles in modal background */
+        .token-modal::after {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(107,140,122,0.08), transparent 70%);
+            pointer-events: none;
+        }
+
+        .token-check {
+            width: 76px; height: 76px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sage), #4a6b58);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            font-weight: 700;
+            margin: 0 auto 24px;
+            box-shadow: 0 12px 32px rgba(107,140,122,0.4), 0 0 0 8px rgba(107,140,122,0.1);
+            position: relative;
+            z-index: 1;
+        }
+        .token-check.error-icon {
+            background: linear-gradient(135deg, var(--red), #8a2020);
+            box-shadow: 0 12px 32px rgba(185,68,68,0.35), 0 0 0 8px rgba(185,68,68,0.1);
+        }
+
+        .token-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--sage);
+            margin-bottom: 8px;
+        }
+        .token-heading.error-text { color: var(--red); }
+        .token-sub { font-size: 0.92rem; font-weight: 400; color: var(--ink-muted); margin-bottom: 24px; line-height: 1.6; }
+
+        .ggid-display {
+            font-size: 0.85rem;
+            font-weight: 700;
+            font-family: 'DM Mono', monospace;
+            color: var(--ink-muted);
+            margin-bottom: 18px;
+            letter-spacing: 0.04em;
+            display: none;
+        }
+        .ggid-display span { color: var(--ink); }
+
+        .token-number-wrap {
+            background: linear-gradient(135deg, var(--sage-bg), rgba(255,255,255,0.5));
+            border: 1.5px solid var(--sage-border);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .token-number-wrap::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4), transparent);
+            pointer-events: none;
+        }
+        .token-number-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--sage);
+            font-family: 'DM Mono', monospace;
+            margin-bottom: 10px;
+        }
+        .token-number {
+            font-family: 'DM Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--ink);
+            letter-spacing: 0.06em;
+            word-break: break-all;
+            position: relative;
+            z-index: 1;
+        }
+
+        .token-details {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+        .token-detail-item {
+            background: rgba(255,255,255,0.6);
+            border: 1px solid rgba(196,181,173,0.35);
+            border-radius: var(--radius-sm);
+            padding: 13px 15px;
+            text-align: left;
+            backdrop-filter: blur(6px);
+        }
+        .token-detail-label {
+            font-size: 0.66rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            font-family: 'DM Mono', monospace;
+            margin-bottom: 4px;
+        }
+        .token-detail-value {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--ink);
+            font-family: 'DM Mono', monospace;
+            word-break: break-all;
+        }
+
+        .token-detail-item-single {
+            padding: 20px 22px;
+        }
+        .token-detail-item-single .token-detail-value {
+            font-size: 1.3rem;
+        }
+
+        /* ── CONFETTI PIECES ── */
+        .confetti-piece {
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            animation: confettiFall linear forwards;
+        }
+        @keyframes confettiFall {
+            0%   { transform: translateY(0) rotate(0deg);   opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* ── VOICE TIP BOX ── */
+        .voice-tip {
+            background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(255,255,255,0.4));
+            border: 1.5px solid rgba(201,168,76,0.3);
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+            font-size: 0.98rem;
+            color: var(--ink-soft);
+            font-weight: 500;
+            line-height: 1.5;
+            margin-bottom: 14px;
+            text-align: center;
+        }
+        .voice-tip strong { color: var(--gold); }
+
+        /* ── PROGRESS DOTS ── */
+        .progress-dots {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .progress-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: rgba(196,181,173,0.4);
+            transition: all 0.3s ease;
+        }
+        .progress-dot.active {
+            width: 20px;
+            border-radius: 3px;
+            background: var(--terracotta);
+        }
+        .progress-dot.done { background: var(--sage); }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .card-header { padding: 20px 22px 18px; }
+            .card-body { padding: 22px 22px 26px; }
+            .card-footer { padding: 14px 22px; }
+            .token-modal { padding: 36px 24px 28px; }
+            .token-number { font-size: 1.6rem; }
+        }
+
+                /* ══ VIRTUAL KEYBOARD ══ */
+        #vk {
+            display: none;
+            position: fixed;
+            left: 0; right: 0; bottom: 0;
+            z-index: 9000;
+            background: rgba(250,247,242,0.98);
+            border-top: 1.5px solid rgba(196,181,173,0.6);
+            box-shadow: 0 -12px 32px rgba(44,36,32,0.18);
+            padding: 12px 14px 16px;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        #vk.show { display: block; animation: slideUp 0.25s ease; }
+        .vk-inner { max-width: 760px; margin: 0 auto; }
+        .vk-row { display: flex; gap: 8px; margin-bottom: 8px; justify-content: center; }
+        .vk-key {
+            flex: 1 1 0;
+            max-width: 64px;
+            min-height: 54px;
+            border: 1.5px solid rgba(196,181,173,0.6);
+            border-radius: 10px;
+            background: #fff;
+            font-family: 'DM Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--ink);
+            cursor: pointer;
+            transition: background 0.1s, transform 0.1s;
+        }
+        .vk-key:active { background: rgba(193,98,74,0.18); transform: scale(0.96); }
+        .vk-key.action { background: rgba(196,181,173,0.3); font-family: 'Outfit', sans-serif; font-size: 0.95rem; }
+        .vk-key.wide { max-width: none; }
+        .vk-key.done { background: linear-gradient(135deg, var(--terracotta), var(--terra-dark)); color: #fff; border-color: transparent; font-size: 1.05rem; }
+        #vk-numeric .vk-key { max-width: 120px; min-height: 62px; font-size: 1.5rem; }
+        #vk-numeric .vk-key.wide { max-width: none; }
+
+        /* Auto-capture: manual photo buttons are never shown */
+        #btn-capture-photo, #btn-retake-photo { display: none !important; }
+    </style>
+</head>
+<body>
+
+<!-- Decorative orbs -->
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- ══ TOKEN POPUP ══ -->
+<div id="token-overlay">
+    <div class="token-modal" id="token-modal">
+        <div class="token-check" id="token-icon">✓</div>
+        <div class="token-heading" id="token-heading">Entry Approved!</div>
+        <div class="token-sub" id="token-sub">Your access token has been generated</div>
+        
+        <!-- <div class="ggid-display" id="ggid-display">GGID : <span id="ggid-text">—</span></div>
+
+        <div class="token-number-wrap" id="token-number-box">
+            <div class="token-number-label">TOKEN NUMBER</div>
+            <div class="token-number" id="token-number-display">TKN---------</div>
+        </div>
+
+        <div class="token-details" id="token-details">
+            <div class="token-detail-item token-detail-item-single">
+                <div class="token-detail-label">Token No.</div>
+                <div class="token-detail-value" id="td-tokenno">—</div>
+            </div>
+        </div> -->
+
+        <div class="token-details" id="token-details">
+            <div class="token-detail-item token-detail-item-single">
+                <div class="token-detail-label">Token No.</div>
+                <div class="token-detail-value" id="td-tokenno">—</div>
+            </div>
+        </div>
+
+        <button class="btn-primary" id="btn-token-ok" onclick="closeTokenPopup()" style="margin-top:0;">
+            <span id="btn-token-ok-text">Proceed → Scan Next Vehicle</span>
+        </button>
+    </div>
+</div>
+
+<!-- ══ VIRTUAL KEYBOARD ══ -->
+<div id="vk">
+    <div class="vk-inner">
+        <div id="vk-alnum"></div>
+        <div id="vk-numeric" style="display:none;"></div>
+    </div>
+</div>
+
+<!-- ══ MAIN CARD ══ -->
+<div class="card">
+    <div class="card-header">
+        <div class="header-content">
+            <div class="header-logo-wrap">
+                <img class="header-logo" src="https://drive.google.com/thumbnail?id=1b97tYz4ZW__m1oK6hfwxkznuBlYyc_zQ&sz=s4000" alt="Logo">
+            </div>
+            <div class="header-text">
+                <h1>VRA GATE ENTRY</h1>
+                <div class="step-pill" id="header-sub">Step 1 of 3 — Language</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <!-- Clock & Date -->
+            <div class="kiosk-time-box">
+                <span id="kiosk-clock" class="kiosk-clock">00:00:00</span>
+                <span id="kiosk-date" class="kiosk-date">-- --- ----</span>
+            </div>
+
+            <!-- Gate Ready Badge -->
+            <div class="gate-ready-badge">
+                <svg viewBox="0 0 24 24" style="width:14px; height:14px; fill:currentColor;">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                <span>Gate Ready</span>
+            </div>
+
+            <!-- Progress dots: kept (the page script updates them) but hidden to match the exit page -->
+            <div class="progress-dots" id="progress-dots" style="display:none;">
+                <div class="progress-dot active" id="dot-1"></div>
+                <div class="progress-dot" id="dot-2"></div>
+                <div class="progress-dot" id="dot-3"></div>
+                <div class="progress-dot" id="dot-4"></div>
+            </div>
+            <button id="btn-start-over" class="btn-start-over" onclick="fullReset()" style="display:none;" title="Start Over">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <!-- SCREEN 1: Language -->
+        <div id="screen-lang" class="screen">
+            <div class="screen-title">Choose Your Language</div>
+            <div class="screen-sub">Please select one of the options given below.</div>
+
+            <div class="lang-grid">
+                <button class="lang-btn" onclick="selectLang('gu-IN','Gujarati','ગુજરાતી',this)">
+                    <span class="flag-emoji">GJ</span>
+                    <span class="lang-name">Gujarati</span>
+                    <span class="lang-native">ગુજરાતી</span>
+                </button>
+                <button class="lang-btn" onclick="selectLang('hi-IN','Hindi','हिन्दी',this)">
+                    <span class="flag-emoji">HI</span>
+                    <span class="lang-name">Hindi</span>
+                    <span class="lang-native">हिन्दी</span>
+                </button>
+                <button class="lang-btn" onclick="selectLang('en-IN','English','English',this)">
+                    <span class="flag-emoji">EN</span>
+                    <span class="lang-name">English</span>
+                    <span class="lang-native">English</span>
+                </button>
+            </div>
+
+            <div class="divider"><span>SELECT TO CONTINUE</span></div>
+
+            <div class="voice-tip">
+                💡 Select your preferred language above <strong>"English"</strong>, <strong>"Hindi"</strong>, or <strong>"Gujarati"</strong> to start the Exit Process. 
+                <!-- <br>Allow microphone access when prompted. -->
+            </div>
+
+            <!-- <button class="voice-btn" id="voice-btn" onclick="startVoiceDetect()">
+                <svg class="mic-icon" viewBox="0 0 24 24">
+                    <rect x="9" y="2" width="6" height="12" rx="3"/>
+                    <path d="M5 10a7 7 0 0 0 14 0"/>
+                    <line x1="12" y1="19" x2="12" y2="22"/>
+                    <line x1="8" y1="22" x2="16" y2="22"/>
+                </svg>
+                <span id="voice-btn-text">🎤 Tap to speak your language</span>
+            </button> -->
+            <div class="voice-status" id="voice-status"></div>
+            <div class="confirm-bar" id="confirm-bar">
+                <span id="confirm-text">Detected: —</span>
+                <div style="display:flex;gap:6px;">
+                    <button class="confirm-yes" onclick="confirmVoiceLang()">Yes ✓</button>
+                    <button class="confirm-no"  onclick="resetVoiceDetect()">No ✗</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN: Photo Capture -->
+        <div id="screen-photo" class="screen" style="display:none;">
+            <div class="screen-title" id="photo-title">Capture Your Photo</div>
+            <div class="screen-sub" id="photo-sub">Position your face inside the circle</div>
+
+            <div class="scanner-wrap" style="position:relative; aspect-ratio:1/1; max-width:340px; margin:0 auto 20px;">
+                <video id="photo-video" autoplay playsinline style="width:100%; height:100%; object-fit:cover; border-radius:var(--radius);"></video>
+                <svg viewBox="0 0 300 300" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none;">
+                    <defs>
+                        <mask id="face-mask">
+                            <rect width="300" height="300" fill="white"/>
+                            <ellipse cx="150" cy="150" rx="95" ry="120" fill="black"/>
+                        </mask>
+                    </defs>
+                    <rect width="300" height="300" fill="rgba(44,36,32,0.45)" mask="url(#face-mask)"/>
+                      <ellipse id="face-guide-ring" cx="150" cy="150" rx="95" ry="120" fill="none" stroke="var(--terracotta)" stroke-width="3"/>
+                </svg>
+                <canvas id="photo-canvas" style="display:none;"></canvas>
+            </div>
+
+            <div class="verify-status" id="photo-status">
+                <div class="spinner"></div>
+                <span id="photo-status-text">Uploading photo…</span>
+            </div>
+
+            <button class="btn-primary" id="btn-capture-photo" onclick="capturePhoto()">
+                <span id="btn-capture-text">📸 Capture Photo</span>
+            </button>
+            <button class="btn-primary" id="btn-retake-photo" onclick="retakePhoto()" style="display:none; margin-top:10px; background:rgba(196,181,173,0.35); color:var(--ink-soft); box-shadow:none;">
+                <span>Retake Photo</span>
+            </button>
+        </div>
+
+        <!-- SCREEN 2: Verification -->
+        <div id="screen-verify" class="screen" style="display:none;">
+            <div class="screen-title" id="verify-title">Driver Verification</div>
+            <div class="screen-sub"  id="verify-sub">Enter your driving license details to proceed</div>
+
+            <div class="field-group">
+                <div class="field-label" id="lbl-dl">
+                    Driving License Number <span class="field-req">*</span>
+                </div>
+                <input
+                    type="text" id="dl-number" class="field-input"
+                    placeholder="15 to 19 characters DL number"
+                    maxlength="19"
+                    inputmode="none"
+                    onfocus="vkOpen('dl')"
+                    oninput="formatDL(this)"
+                    onblur="onDLBlur()"
+                    autocomplete="off" autocorrect="off" spellcheck="false"
+                >
+                <div class="dl-counter" id="dl-counter">0 / must be 15 to 19 characters</div>
+                <div class="field-hint" id="hint-dl">Alphanumeric only · between 15 and 19 characters</div>
+                <div class="field-error" id="dl-error"></div>
+            </div>
+
+            <div class="field-group">
+                <div class="field-label" id="lbl-dob">
+                    Date of Birth <span class="field-req">*</span>
+                </div>
+                <input type="text" id="dob-text" class="field-input" placeholder="DD/MM/YYYY" readonly inputmode="none" autocomplete="off" onfocus="vkOpen('dob')">
+                <input type="date" id="dob" style="display:none;">
+                <div class="field-error" id="dob-error"></div>
+            </div>
+
+            <div class="verify-status" id="verify-status">
+                <div class="spinner"></div>
+                <span id="verify-status-text">Verifying…</span>
+            </div>
+
+            <button class="btn-primary" id="btn-verify" onclick="vkVerifyClick()">
+                <span id="btn-verify-text">Verify &amp; Continue →</span>
+            </button>
+        </div>
+
+        <!-- SCREEN 3: QR Scanner -->
+        <div id="screen-scanner" class="screen" style="display:none;">
+            <div class="driver-chip"><span id="driver-chip-text">Verified Driver</span></div>
+
+            <div id="scanner-view">
+                <div class="scanner-wrap" style="display:flex; align-items:center; justify-content:center; min-height:180px; padding: 20px;">
+                    <div style="text-align:center;">
+                        <!-- Animated SVG Scanner Icon -->
+                        <div style="position: relative; width: 72px; height: 72px; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; background: rgba(16, 185, 129, 0.08); border-radius: 50%; border: 1px solid rgba(16, 185, 129, 0.2);">
+                            <svg viewBox="0 0 24 24" style="width:32px; height:32px; stroke:var(--sage); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;">
+                                <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
+                                <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
+                                <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
+                                <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
+                                <rect x="7" y="7" width="10" height="10" rx="1.5"></rect>
+                            </svg>
+                        </div>
+
+                        <div style="font-family:'Playfair Display', serif; font-size:1.5rem; font-weight:700; color:var(--ink); letter-spacing:-0.02em;">Ready to Scan</div>
+                        <div style="font-size:0.88rem; color:var(--ink-muted); margin-top:6px; font-weight:400; line-height:1.5;">Show the QR code to the scanner machine</div>
+                    </div>
+                </div>
+
+                <!-- "Active Listening" Input Field -->
+                <div style="position: relative; width: 90%; max-width: 300px; margin: 16px auto 0;">
+                    <input type="text" id="gun-scan-input" inputmode="none" autocomplete="off" autofocus
+                       style="width:100%; padding:14px 16px 14px 42px; border:2px solid rgba(16,185,129,0.35); border-radius:var(--radius-sm); font-family:'DM Mono',monospace; font-size:0.95rem; font-weight:600; color:var(--ink); background:rgba(255,255,255,0.7); box-shadow:0 4px 12px rgba(16,185,129,0.08); outline:none; transition:all 0.3s ease;"
+                       placeholder="Waiting for scanner..."
+                       onfocus="this.style.borderColor='var(--sage)'; this.style.boxShadow='0 0 0 4px rgba(16,185,129,0.15), 0 4px 12px rgba(16,185,129,0.1)'"
+                       onblur="this.style.borderColor='rgba(16,185,129,0.35)'; this.style.boxShadow='0 4px 12px rgba(16,185,129,0.08)'">
+
+                    <!-- Pulsing Green Indicator Dot -->
+                    <div style="position:absolute; left:18px; top:50%; transform:translateY(-50%); width:8px; height:8px; border-radius:50%; background:var(--sage); animation:pulse-sage 2s infinite; pointer-events: none;"></div>
+                </div>
+
+                <div class="scan-hint">
+                    <span class="tag">TIP :</span>
+                    <span id="scan-hint-text">Hold the QR code steady</span>
+                </div>
+            </div>
+
+            <div id="result-container">
+                <p class="result-label" id="lbl-vehicle">QR Code</p>
+                <div class="data-card">
+                    <div id="qr-data"></div>
+                </div>
+
+                <div class="sap-result status-sync" id="sap-result">
+                    <div class="sap-result-header">
+                        <div class="sap-result-icon" id="sap-icon">
+                            <div class="spinner" style="width:15px;height:15px;border-width:2.5px;"></div>
+                        </div>
+                        <div class="sap-result-title" id="sap-title">Checking with SAP…</div>
+                    </div>
+                    <div class="sap-result-msg"  id="sap-msg"></div>
+                    <div class="sap-result-code" id="sap-code"></div>
+                </div>
+
+                <div class="reset-countdown" id="reset-countdown">
+                    <div class="countdown-label" id="countdown-label">Returning to start…</div>
+                    <div class="countdown-track">
+                        <div class="countdown-bar" id="countdown-bar" style="width:100%"></div>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="fullReset()" style="display:none;">
+                    <span id="btn-reset-text">Scan Next Vehicle</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card-footer">
+        <span class="status-dot">System Online</span>
+        <span class="footer-label" id="footer-info">No language selected</span>
+    </div>
+</div>
+
+<script>
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhrMKxCKEL2ADySrQsPVBjun_nD2RHRsD8QwakIc-Bz5OjfJu-GGfUFAFMcAVxkkpCRg/exec";
+
+const LANG_MAP = {
+    'gu-IN': {
+        name:'Gujarati', native:'ગુજરાતી',
+        verifyTitle:'ડ્રાઇવર ચકાસણી',
+        verifySub:'આગળ વધવા માટે તમારી લાઇસન્સ વિગત દાખલ કરો',
+        lblDL:'ડ્રાઇવિંગ લાઇસન્સ નંબર', lblDOB:'જન્મ તારીખ',
+        hintDL:'માત્ર અક્ષરો અને સંખ્યા · 15 થી 19 અક્ષરો વચ્ચે',
+        btnVerify:'ચકાસો અને આગળ વધો →',
+        scanHint:'QR કોડને સ્કૅનર સામે સ્થિર રાખો',
+        lblVehicle:'QR કોડ', btnReset:'નવો QR કોડ સ્કૅન કરો',
+        verifyPrompt:'કૃપા કરીને તમારો ડ્રાઇવિંગ લાઇસન્સ નંબર દાખલ કરો.',
+        dobPrompt:'હવે તમારી જન્મ તારીખ પસંદ કરો.',
+        verifySuccess:'ચકાસણી સફળ. QR કૉડ સ્કૅન કરો.',
+        verifyFail:'ચકાસણી નિષ્ફળ. કૃપા કરીને વિગતો ચકાસો.',
+        scanned:'QR કોડ સફળતાપૂર્વક સ્કૅન થયો.',
+        countdownMsg:'શરૂઆત પર પાછા…',
+        sapA:'ડ્રાઇવર પ્રવેશ માટે મંજૂર છે.',
+        sapB:'ડ્રાઇવર બ્લૉક છે. પ્રવેશ નહીં.',
+        sapC:'સારથી API ચકાસણી જરૂરી.',
+        sapE:'SAP ભૂલ. ફરી પ્રયાસ કરો.',
+        tokenHeading:'પ્રવેશ મંજૂર!',
+        tokenSub:'તમારો એક્સેસ ટોકન જનરેટ થઈ ગયો છે',
+        tokenBtn:'આગળ વાહન સ્કૅન કરો',
+        tokenDenied:'પ્રવેશ નકારવામાં આવ્યો!',
+    },
+    'hi-IN': {
+        name:'Hindi', native:'हिन्दी',
+        verifyTitle:'चालक सत्यापन',
+        verifySub:'आगे बढ़ने के लिए अपने लाइसेंस की जानकारी दर्ज करें',
+        lblDL:'ड्राइविंग लाइसेंस नंबर', lblDOB:'जन्म तिथि',
+        hintDL:'केवल अक्षर और अंक · 15 से 19 अक्षर के बीच',
+        btnVerify:'सत्यापित करें और जारी रखें →',
+        scanHint:'QR कोड को स्कैनर के सामने स्थिर रखें',
+        lblVehicle:'QR कोड', btnReset:'नया QR कोड स्कैन करें',
+        verifyPrompt:'कृपया अपना ड्राइविंग लाइसेंस नंबर दर्ज करें।',
+        dobPrompt:'अब अपनी जन्म तिथि चुनें।',
+        verifySuccess:'सत्यापन सफल। QR कोड स्कैन करें।',
+        verifyFail:'सत्यापन विफल। कृपया जानकारी जाँचें।',
+        scanned:'QR कोड सफलतापूर्वक स्कैन हुआ।',
+        countdownMsg:'शुरुआत पर वापस…',
+        sapA:'चालक अनुमत है। प्रवेश दें।',
+        sapB:'चालक ब्लॉक है। प्रवेश नहीं।',
+        sapC:'सारथी API जाँच आवश्यक।',
+        sapE:'SAP त्रुटि। पुनः प्रयास करें।',
+        tokenHeading:'प्रवेश स्वीकृत!',
+        tokenSub:'आपका एक्सेस टोकन जनरेट हो गया है',
+        tokenBtn:'अगला वाहन स्कैन करें',
+        tokenDenied:'प्रवेश अस्वीकृत!',
+    },
+    'en-IN': {
+        name:'English', native:'English',
+        verifyTitle:'Driver Verification',
+        verifySub:'Enter your driving license details to proceed',
+        lblDL:'Driving License Number', lblDOB:'Date of Birth',
+        hintDL:'Alphanumeric only · between 15 and 19 characters',
+        btnVerify:'Verify & Continue →',
+        scanHint:'Hold the QR code steady in front of the scanner',
+        lblVehicle:'QR Code', btnReset:'Scan New QR Code',
+        verifyPrompt:'Please enter your driving license number.',
+        dobPrompt:'Now select your date of birth.',
+        verifySuccess:'Verification successful. Please scan the QR code.',
+        verifyFail:'Verification failed. Please check your details.',
+        scanned:'QR code scanned successfully.',
+        countdownMsg:'Returning to start…',
+        sapA:'Driver is allowed. Grant entry.',
+        sapB:'Driver is blocked. Entry denied.',
+        sapC:'Sarathi API check required.',
+        sapE:'SAP error. Please retry.',
+        tokenHeading:'Entry Approved!',
+        tokenSub:'Your access token has been generated',
+        tokenBtn:'Proceed → Scan Next Vehicle',
+        tokenDenied:'Entry Denied!',
+    },
+};
+
+const SAP_STATUS_CONFIG = {
+    A: { cls:'status-A', icon:'✓', title:{ 'gu-IN':'ડ્રાઇવર મંજૂર', 'hi-IN':'चालक अनुमत', 'en-IN':'Driver Allowed' } },
+    B: { cls:'status-B', icon:'✕', title:{ 'gu-IN':'ડ્રાઇવર બ્લૉક', 'hi-IN':'चालक ब्लॉक', 'en-IN':'Driver Blocked' } },
+    C: { cls:'status-C', icon:'⚠', title:{ 'gu-IN':'સારથી ચકાસણી', 'hi-IN':'सारथी जाँच', 'en-IN':'Sarathi Check Required' } },
+    E: { cls:'status-B', icon:'!', title:{ 'gu-IN':'SAP ભૂલ', 'hi-IN':'SAP त्रुटि', 'en-IN':'SAP Error' } },
+};
+
+// EXPANDED voice keyword list — catches more speech variations
+const VOICE_KEYWORDS = {
+    // Gujarati
+    'gujarati':'gu-IN','gujarat':'gu-IN','gujrati':'gu-IN','gujrathi':'gu-IN','gujrati':'gu-IN',
+    'gu':'gu-IN','guj':'gu-IN','gu-in':'gu-IN',
+    'ગુજરાતી':'gu-IN','ગુજરાત':'gu-IN','gu in':'gu-IN',
+    // Hindi
+    'hindi':'hi-IN','hind':'hi-IN','hi':'hi-IN','hindhi':'hi-IN','hindi':'hi-IN',
+    'हिन्दी':'hi-IN','हिंदी':'hi-IN','हिन्दी':'hi-IN','hi in':'hi-IN',
+    // English
+    'english':'en-IN','eng':'en-IN','english language':'en-IN','inglish':'en-IN',
+    'અંગ્રેજી':'en-IN','अंग्रेजी':'en-IN','en in':'en-IN','en':'en-IN',
+};
+
+// ══════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════
+let selectedLang      = null;
+let voiceDetected     = null;
+let driverDL          = '';
+let driverDOB         = '';
+let html5Scanner      = null;
+let autoResetTimer    = null;
+let countdownInterval = null;
+let recognition       = null;
+let voicesLoaded      = false;
+
+// ══════════════════════════════════════════════════════
+//  SPEECH — with Gujarati fallback strategy
+// ══════════════════════════════════════════════════════
+let _allVoices = [];
+
+function loadVoices() {
+    return new Promise(resolve => {
+        const check = () => {
+            const v = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+            if (v.length > 0) { voicesLoaded = true; _allVoices = v; resolve(v); return true; }
+            return false;
+        };
+        if (check()) return;
+        if (window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => { check(); resolve(_allVoices); };
+        }
+        setTimeout(() => { voicesLoaded = true; resolve(_allVoices); }, 2000);
+    });
+}
+
+function getBestVoice(langCode) {
+    const voices = _allVoices.length ? _allVoices : (window.speechSynthesis ? window.speechSynthesis.getVoices() : []);
+    
+    // Priority order for each language
+    const priorities = {
+        'gu-IN': ['gu-IN', 'gu', 'hi-IN', 'hi', 'en-IN', 'en'],
+        'hi-IN': ['hi-IN', 'hi', 'en-IN', 'en'],
+        'en-IN': ['en-IN', 'en-GB', 'en-US', 'en'],
+    };
+    
+    const prio = priorities[langCode] || ['en-IN', 'en'];
+    for (const p of prio) {
+        const v = voices.find(v => v.lang === p) || voices.find(v => v.lang.startsWith(p.split('-')[0]));
+        if (v) return v;
+    }
+    return null;
+}
+
+function speak(text, langCode) {
+    if (!window.speechSynthesis || !text) return;
+    
+    const doSpeak = () => {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = langCode || 'en-IN';
+        u.rate  = 0.88;
+        u.pitch = 1;
+        
+        const voice = getBestVoice(langCode);
+        if (voice) u.voice = voice;
+        
+        // Keep alive (iOS/Chrome bug fix)
+        const keepAlive = setInterval(() => {
+            if (!window.speechSynthesis.speaking) { clearInterval(keepAlive); return; }
+            window.speechSynthesis.pause();
+            window.speechSynthesis.resume();
+        }, 5000);
+        u.onend = u.onerror = () => clearInterval(keepAlive);
+        
+        window.speechSynthesis.speak(u);
+    };
+    
+    if (voicesLoaded && _allVoices.length) {
+        doSpeak();
+    } else {
+        loadVoices().then(doSpeak);
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  PROGRESS DOTS
+// ══════════════════════════════════════════════════════
+function updateProgressDots(step) {
+    [1,2].forEach(i => {
+        const dot = document.getElementById('dot-' + i);
+        dot.className = 'progress-dot';
+        if (i < step) dot.classList.add('done');
+        else if (i === step) dot.classList.add('active');
+    });
+}
+
+// ══════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════
+window.addEventListener('load', () => {
+    document.getElementById('dob').max = new Date().toISOString().split('T')[0];
+    loadVoices().then(() => {
+        // Greeting in Gujarati — uses best available voice
+        speak('गेट एंट्री प्रक्रिया शुरू करने के लिए, कृपया अपनी भाषा चुनें।', 'hi-IN');
+    });
+    goToScreen(1);
+});
+
+// ══════════════════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════════════════
+function goToScreen(n) {
+    document.getElementById('screen-lang').style.display    = n===1 ? '' : 'none';
+    document.getElementById('screen-scanner').style.display = n===2 ? '' : 'none';
+    document.getElementById('btn-start-over').style.display = n===1 ? 'none' : 'flex';
+    updateProgressDots(n);
+
+    const labels = [
+        'Step 1 of 2 — Language',
+        'Step 2 of 2 — QR Scanner'
+    ];
+    document.getElementById('header-sub').textContent = labels[n-1];
+}
+
+// ══════════════════════════════════════════════════════
+//  SCREEN 1 — Language selection
+// ══════════════════════════════════════════════════════
+function selectLang(code, name, native, btn) {
+    selectedLang = { code, name, native };
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    document.getElementById('footer-info').textContent = `${name} · ${native}`;
+    speak(native, code);
+    // setTimeout(() => goToVerify(), 700);
+    setTimeout(() => goToScannerScreen(), 700);
+}
+
+// ── VOICE DETECTION — improved with multiple languages & fallbacks ──
+function startVoiceDetect() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) {
+        document.getElementById('voice-status').textContent = '⚠ Speech recognition not supported in this browser. Please use Chrome.';
+        return;
+    }
+    if (recognition) { try { recognition.stop(); } catch(e) {} recognition = null; }
+
+    // We try multiple language codes so the browser can capture any of the three
+    recognition = new SR();
+    recognition.lang = 'gu-IN';   // primary — Gujarati (most likely user)
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 10;
+    recognition.continuous = false;
+
+    const btn = document.getElementById('voice-btn');
+    btn.classList.add('listening');
+    document.getElementById('voice-btn-text').textContent = '🔴 Listening… speak now';
+    document.getElementById('voice-status').textContent   = '';
+    document.getElementById('confirm-bar').style.display  = 'none';
+
+    speak('બોલો… ગુજરાતી, હિન્દી, અથવા English', 'gu-IN');
+
+    recognition.onresult = (e) => {
+        resetVoiceUI();
+        // Collect ALL alternatives from ALL results
+        const transcripts = [];
+        for (let ri = 0; ri < e.results.length; ri++) {
+            for (let ai = 0; ai < e.results[ri].length; ai++) {
+                transcripts.push(e.results[ri][ai].transcript.toLowerCase().trim());
+            }
+        }
+        
+        document.getElementById('voice-status').textContent = 'Heard: ' + (transcripts[0] || '');
+        console.log('Voice transcripts:', transcripts);
+
+        let detected = null;
+        outer:
+        for (const t of transcripts) {
+            // Direct keyword match
+            for (const [kw, code] of Object.entries(VOICE_KEYWORDS)) {
+                if (t.includes(kw.toLowerCase())) {
+                    detected = code;
+                    break outer;
+                }
+            }
+            // Fuzzy: check if transcript sounds like known words
+            if (/guj|gu[jz]|gjr/.test(t))  { detected = 'gu-IN'; break; }
+            if (/hin|hnd|हिं|हिन/.test(t))  { detected = 'hi-IN'; break; }
+            if (/eng|engl|ingle/.test(t))   { detected = 'en-IN'; break; }
+        }
+
+        if (detected) {
+            voiceDetected = detected;
+            const info = LANG_MAP[detected];
+            document.getElementById('confirm-text').textContent = `${info.name} (${info.native}) — Correct?`;
+            document.getElementById('confirm-bar').style.display = 'flex';
+            document.getElementById('voice-status').textContent = '';
+            speak(`${info.native} — confirm karshao?`, detected);
+        } else {
+            document.getElementById('voice-status').textContent = '⚠ Could not detect. Please tap a language above.';
+            speak('Could not detect. Please tap a language.', 'en-IN');
+        }
+    };
+
+    recognition.onerror = (e) => {
+        resetVoiceUI();
+        let msg = 'Mic error. ';
+        if (e.error === 'not-allowed') msg = '⚠ Microphone access denied. Please allow mic and try again.';
+        else if (e.error === 'no-speech') msg = '⚠ No speech detected. Tap and speak clearly.';
+        else if (e.error === 'network') msg = '⚠ Network error. Check your connection.';
+        else msg = '⚠ ' + e.error + '. Please try again.';
+        document.getElementById('voice-status').textContent = msg;
+    };
+
+    recognition.onend = () => { resetVoiceUI(); };
+
+    try {
+        recognition.start();
+    } catch(e) {
+        resetVoiceUI();
+        document.getElementById('voice-status').textContent = '⚠ Could not start mic. Try refreshing.';
+    }
+}
+
+function resetVoiceUI() {
+    const btn = document.getElementById('voice-btn');
+    btn.classList.remove('listening');
+    document.getElementById('voice-btn-text').textContent = '🎤 Tap to speak your language';
+}
+
+function confirmVoiceLang() {
+    if (!voiceDetected) return;
+    const info = LANG_MAP[voiceDetected];
+    selectedLang = { code: voiceDetected, ...info };
+    document.getElementById('confirm-bar').style.display = 'none';
+    document.getElementById('footer-info').textContent = `${info.name} · ${info.native}`;
+    voiceDetected = null;
+    // setTimeout(() => goToVerify(), 400);
+    setTimeout(() => goToScannerScreen(), 400);
+}
+
+function resetVoiceDetect() {
+    voiceDetected = null;
+    document.getElementById('confirm-bar').style.display = 'none';
+    document.getElementById('voice-status').textContent = 'Cancelled. Tap a language above.';
+}
+
+// ══════════════════════════════════════════════════════
+//  SCREEN 2 — Driver Verification
+// ══════════════════════════════════════════════════════
+function goToVerify() {
+    goToScreen(3);
+    const L = LANG_MAP[selectedLang?.code] || LANG_MAP['en-IN'];
+    document.getElementById('verify-title').textContent    = L.verifyTitle;
+    document.getElementById('verify-sub').textContent      = L.verifySub;
+    document.getElementById('lbl-dl').innerHTML            = L.lblDL + ' <span class="field-req">*</span>';
+    document.getElementById('lbl-dob').innerHTML           = L.lblDOB + ' <span class="field-req">*</span>';
+    document.getElementById('hint-dl').textContent         = L.hintDL;
+    document.getElementById('btn-verify-text').textContent = L.btnVerify;
+    ['dl-number','dob'].forEach(id => {
+        const el = document.getElementById(id);
+        el.value = '';
+        el.classList.remove('error','success');
+    });
+    document.getElementById('dl-error').classList.remove('show');
+    document.getElementById('dob-error').classList.remove('show');
+    document.getElementById('dl-counter').textContent  = '0 / must be 15 to 19 characters';
+    document.getElementById('dl-counter').className   = 'dl-counter';
+    document.getElementById('verify-status').className = 'verify-status';
+    document.getElementById('btn-verify').disabled = false;
+    const code = selectedLang?.code || 'en-IN';
+    setTimeout(() => speak(L.verifyPrompt, code), 400);
+}
+
+// let photoStream = null;
+// let driverPhotoUrl = '';
+let photoStream = null;
+let driverPhotoUrl = '';
+let faceModelLoaded = false;
+let faceModelLoading = null;
+
+function loadFaceModel() {
+    if (faceModelLoaded) return Promise.resolve();
+    if (faceModelLoading) return faceModelLoading;
+    faceModelLoading = faceapi.nets.tinyFaceDetector.loadFromUri(
+        'https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights'
+    ).then(() => {
+        const warmupCanvas = document.createElement('canvas');
+        warmupCanvas.width = 160;
+        warmupCanvas.height = 120;
+        return faceapi.detectSingleFace(warmupCanvas, new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.3 }));
+    }).then(() => {
+        faceModelLoaded = true;
+    }).catch(err => {
+        console.error('Face model load failed:', err);
+        faceModelLoaded = false;
+        faceModelLoading = null;
+    });
+    return faceModelLoading;
+}
+
+let liveDetectionInterval = null;
+let consecutiveGoodFrames = 0;
+const REQUIRED_CONSECUTIVE_FRAMES = 4;
+let autoCaptureFired = false;
+
+function startLiveFaceDetection() {
+    stopLiveFaceDetection();
+    consecutiveGoodFrames = 0;
+    autoCaptureFired = false;
+    document.getElementById('btn-capture-photo').style.display = 'none';
+
+    liveDetectionInterval = setInterval(async () => {
+        const video = document.getElementById('photo-video');
+        if (!video.videoWidth || !video.videoHeight) return;
+
+        try {
+            const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.3 }));
+            if (autoCaptureFired) return;
+            const ring = document.getElementById('face-guide-ring');
+
+            if (detection) {
+                const box = detection.box;
+                const faceRatio = (box.width * box.height) / (video.videoWidth * video.videoHeight);
+                const centerX = box.x + box.width / 2;
+                const centerY = box.y + box.height / 2;
+                const isCentered = Math.abs(centerX - video.videoWidth / 2) < video.videoWidth * 0.3
+                                 && Math.abs(centerY - video.videoHeight / 2) < video.videoHeight * 0.3;
+                const goodSize = faceRatio > 0.03 && faceRatio < 0.75;
+
+                  if (isCentered && goodSize) {
+                    consecutiveGoodFrames++;
+                    ring.setAttribute('stroke', '#6b8c7a');
+                    if (consecutiveGoodFrames < REQUIRED_CONSECUTIVE_FRAMES) {
+                        document.getElementById('photo-status-text').textContent = 'Hold still…';
+                    }
+                } else {
+                    consecutiveGoodFrames = 0;
+                    ring.setAttribute('stroke', '#c9a84c');
+                    document.getElementById('photo-status-text').textContent = goodSize ? 'Center your face in the circle' : 'Adjust distance from camera';
+                }
+            } else {
+                consecutiveGoodFrames = 0;
+                document.getElementById('face-guide-ring').setAttribute('stroke', 'var(--terracotta)');
+                document.getElementById('photo-status-text').textContent = 'Align your face in the circle…';
+            }
+
+            if (consecutiveGoodFrames >= REQUIRED_CONSECUTIVE_FRAMES) {
+                if (!autoCaptureFired) {
+                    autoCaptureFired = true;
+                    capturePhoto();
+                }
+            }
+        } catch (err) {
+            console.error('Live detection error:', err);
+        }
+    }, 350);
+}
+
+function stopLiveFaceDetection() {
+    if (liveDetectionInterval) {
+        clearInterval(liveDetectionInterval);
+        liveDetectionInterval = null;
+    }
+}
+
+function goToPhotoScreen() {
+    goToScreen(2);
+    document.getElementById('btn-capture-photo').style.display = 'none';
+    document.getElementById('btn-retake-photo').style.display = 'none';
+    document.getElementById('photo-status').className = 'verify-status loading';
+    document.getElementById('photo-status-text').textContent = 'Preparing camera…';
+    document.getElementById('photo-video').style.display = '';
+    initializeCamera();
+    loadFaceModel().then(() => {
+        document.getElementById('photo-status').className = 'verify-status loading';
+        document.getElementById('photo-status-text').textContent = 'Align your face in the circle…';
+        startLiveFaceDetection();
+    });
+}
+function initializeCamera() {
+    if (photoStream) {
+        photoStream.getTracks().forEach(t => t.stop());
+        photoStream = null;
+    }
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
+        .then(stream => {
+            photoStream = stream;
+            const video = document.getElementById('photo-video');
+            video.srcObject = stream;
+        })
+        .catch(err => {
+            console.error('Camera error:', err);
+            document.getElementById('photo-status').className = 'verify-status error';
+            document.getElementById('photo-status-text').textContent = 'Camera access denied. Please allow camera and retry.';
+        });
+}
+
+async function capturePhoto() {
+    stopLiveFaceDetection();
+
+    const video  = document.getElementById('photo-video');
+    const canvas = document.getElementById('photo-canvas');
+
+    if (!video.videoWidth || !video.videoHeight) {
+        const statusEl = document.getElementById('photo-status');
+        statusEl.className = 'verify-status error';
+        document.getElementById('photo-status-text').textContent = '✕ Camera not ready yet. Please wait a moment and try again.';
+        startLiveFaceDetection();
+        return;
+    }
+
+    canvas.width  = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    const statusEl = document.getElementById('photo-status');
+    const base64Image = canvas.toDataURL('image/jpeg', 0.85);
+
+    if (photoStream) {
+        photoStream.getTracks().forEach(t => t.stop());
+        photoStream = null;
+    }
+    document.getElementById('photo-video').style.display = 'none';
+    document.getElementById('btn-capture-photo').style.display = 'none';
+    document.getElementById('btn-retake-photo').style.display = '';
+
+    statusEl.className = 'verify-status loading';
+    document.getElementById('photo-status-text').textContent = 'Uploading photo…';
+
+    fetch(APPS_SCRIPT_URL, {
+        method:  'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'uploadPhoto', imageBase64: base64Image })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            driverPhotoUrl = data.photoUrl || '';
+            statusEl.className = 'verify-status success';
+            document.getElementById('photo-status-text').textContent = '✓ Photo captured';
+            setTimeout(() => goToVerify(), 900);
+        } else {
+            statusEl.className = 'verify-status error';
+            document.getElementById('photo-status-text').textContent = '✕ ' + (data.message || 'Upload failed.') + ' Retrying…';
+            setTimeout(() => retakePhoto(), 2500);
+        }
+    })
+    .catch(err => {
+        console.warn('Photo upload error:', err);
+        statusEl.className = 'verify-status error';
+        document.getElementById('photo-status-text').textContent = '✕ Upload failed. Retrying…';
+        setTimeout(() => retakePhoto(), 2500);
+    });
+}
+
+function retakePhoto() {
+    driverPhotoUrl = '';
+    document.getElementById('photo-video').style.display = '';
+    document.getElementById('btn-capture-photo').style.display = 'none';
+    document.getElementById('btn-retake-photo').style.display = 'none';
+    document.getElementById('photo-status').className = 'verify-status loading';
+    document.getElementById('photo-status-text').textContent = 'Align your face in the circle…';
+    initializeCamera();
+    startLiveFaceDetection();
+}
+
+function onDLBlur() {
+    if (validateDL() && selectedLang) {
+        const L = LANG_MAP[selectedLang.code] || LANG_MAP['en-IN'];
+        setTimeout(() => speak(L.dobPrompt, selectedLang.code), 200);
+    }
+}
+
+function formatDL(input) {
+    input.value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 19);
+    updateDLCounter(input.value.length);
+}
+
+function updateDLCounter(len) {
+    const c = document.getElementById('dl-counter');
+    if (len >= 15 && len <= 19) { c.textContent = `${len} ✓ valid length`; c.className = 'dl-counter valid'; }
+    else if (len === 0)         { c.textContent = '0 / must be 15 to 19 characters'; c.className = 'dl-counter'; }
+    else                        { c.textContent = `${len} / must be between 15 and 19`; c.className = 'dl-counter invalid'; }
+}
+
+function validateDL() {
+    const val = document.getElementById('dl-number').value.trim();
+    const inp = document.getElementById('dl-number');
+    const err = document.getElementById('dl-error');
+    if (!val) { inp.classList.remove('error','success'); err.classList.remove('show'); return false; }
+    //if (val.length !== 15 && val.length !== 19) {
+    //    inp.classList.add('error'); inp.classList.remove('success');
+    //    err.textContent = `Must be exactly 15 or 19 characters (you entered ${val.length}).`;
+    //    err.classList.add('show'); return false;
+    //}
+        if (val.length < 15 || val.length > 19) {
+        inp.classList.add('error'); inp.classList.remove('success');
+        err.textContent = `Must be between 15 and 19 characters (you entered ${val.length}).`;
+        err.classList.add('show'); return false;
+    }
+    if (!/^[A-Z0-9]+$/.test(val)) {
+        inp.classList.add('error'); inp.classList.remove('success');
+        err.textContent = 'Only letters A–Z and digits 0–9 are allowed.';
+        err.classList.add('show'); return false;
+    }
+    inp.classList.add('success'); inp.classList.remove('error');
+    err.classList.remove('show'); return true;
+}
+
+function validateDOB() {
+    const val = document.getElementById('dob').value;
+    const inp = document.getElementById('dob');
+    const err = document.getElementById('dob-error');
+    if (!val) { inp.classList.remove('error','success'); err.classList.remove('show'); return false; }
+    const age = (Date.now() - new Date(val)) / (1000*60*60*24*365.25);
+    if (age < 18 || age > 80) {
+        inp.classList.add('error'); inp.classList.remove('success');
+        err.textContent = 'Driver must be between 18 and 80 years old.';
+        err.classList.add('show'); return false;
+    }
+    inp.classList.add('success'); inp.classList.remove('error');
+    err.classList.remove('show'); return true;
+}
+
+function setVerifyStatus(type, msg) {
+    const el = document.getElementById('verify-status');
+    el.className = 'verify-status ' + type;
+    document.getElementById('verify-status-text').textContent = msg;
+}
+
+async function verifyDriver() {
+    if (!validateDL() || !validateDOB()) return;
+    const dl   = document.getElementById('dl-number').value.trim();
+    const dob  = document.getElementById('dob').value;
+    const code = selectedLang?.code || 'en-IN';
+    const L    = LANG_MAP[code] || LANG_MAP['en-IN'];
+
+    document.getElementById('btn-verify').disabled = true;
+    setVerifyStatus('loading', 'Verifying…');
+
+    try {
+        // const res  = await fetch(APPS_SCRIPT_URL, {
+        //     method:  'POST',
+        //     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        //     body:    JSON.stringify({ action: 'verify', licenseNumber: dl, driverDOB: dob })
+        // });
+        const res  = await fetch(APPS_SCRIPT_URL, {
+            method:  'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body:    JSON.stringify({ action: 'verify', licenseNumber: dl, driverDOB: dob, photoUrl: driverPhotoUrl })
+        });
+        const data = await res.json();
+        console.log('Verify response:', data);
+
+        if (data.status === 'success' && data.verified === true) {
+            driverDL  = dl;
+            driverDOB = dob;
+            window._uniqueNo = data.uniqueNo;
+            setVerifyStatus('success', '✓ ' + L.verifySuccess);
+            speak(L.verifySuccess, code);
+            setTimeout(() => goToScannerScreen(), 1400);
+
+        } else if (data.status === 'notfound' && data.sapStatus === 'B') {
+            setVerifyStatus('error', '✕ ' + L.sapB);
+            speak(L.sapB, code);
+            document.getElementById('btn-verify').disabled = false;
+
+        } else if (data.status === 'sarathi') {
+            setVerifyStatus('error', '✕ ' + L.sapC);
+            speak(L.sapC, code);
+            document.getElementById('btn-verify').disabled = false;
+
+        } else if (data.status === 'invalid') {
+            setVerifyStatus('error', '✕ ' + (data.message || L.verifyFail));
+            speak(L.verifyFail, code);
+            document.getElementById('dob').classList.add('error');
+            document.getElementById('dob').classList.remove('success');
+            document.getElementById('dob-error').textContent = data.message || 'Incorrect Date of Birth.';
+            document.getElementById('dob-error').classList.add('show');
+            document.getElementById('btn-verify').disabled = false;
+
+        } else if (data.status === 'error') {
+            setVerifyStatus('error', '✕ ' + (data.message || L.sapE));
+            speak(L.sapE, code);
+            document.getElementById('btn-verify').disabled = false;
+
+        } else {
+            setVerifyStatus('error', '✕ ' + (data.message || L.verifyFail));
+            document.getElementById('btn-verify').disabled = false;
+        }
+
+    } catch (err) {
+        console.warn('Apps Script error:', err);
+        setVerifyStatus('error', '✕ ' + (err.message || L.sapE));
+        speak(L.sapE, code);
+        document.getElementById('btn-verify').disabled = false;
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  SCREEN 3 — QR Scanner
+// ══════════════════════════════════════════════════════
+function goToScannerScreen() {
+    goToScreen(2);
+    document.getElementById('scanner-view').style.display = '';
+    document.getElementById('result-container').style.display = 'none';
+    document.getElementById('reset-countdown').classList.remove('show');
+    document.getElementById('sap-result').className = 'sap-result status-sync';
+    document.getElementById('sap-result').classList.remove('show');
+    const L   = LANG_MAP[selectedLang?.code] || LANG_MAP['en-IN'];
+    const dob = new Date(driverDOB).toLocaleDateString('en-IN');
+    document.getElementById('driver-chip-text').textContent = L.name || 'Ready to Scan';
+    document.getElementById('scan-hint-text').textContent   = L.scanHint;
+    document.getElementById('lbl-vehicle').textContent      = L.lblVehicle;
+    document.getElementById('btn-reset-text').textContent   = L.btnReset;
+    setTimeout(() => {
+        if (document.getElementById('scanner-view').style.display !== 'none') {
+            speak(L.scanHint, selectedLang?.code || 'en-IN');
+        }
+    }, 1000);
+    initializeScanner();
+}
+
+let gunRefocusInterval = null;
+
+function initializeScanner() {
+    const input = document.getElementById('gun-scan-input');
+    input.value = '';
+    input.focus();
+
+    input.addEventListener('keydown', handleGunInput);
+
+    clearInterval(gunRefocusInterval);
+    gunRefocusInterval = setInterval(() => {
+        if (document.getElementById('screen-scanner').style.display !== 'none') {
+            input.focus();
+        }
+    }, 500);
+}
+
+function handleGunInput(e) {
+    console.log('Key event:', e.key, '| Value so far:', e.target.value);
+    if (e.key === 'Enter') {
+        const scannedText = e.target.value.trim();
+        if (scannedText.length > 0) {
+            e.target.value = '';
+            onScanSuccess(scannedText);
+        }
+    }
+}
+
+function stopScannerListener() {
+    clearInterval(gunRefocusInterval);
+    const input = document.getElementById('gun-scan-input');
+    if (input) input.removeEventListener('keydown', handleGunInput);
+}
+
+function onScanSuccess(decodedText) {
+    stopScannerListener();
+    document.getElementById('scanner-view').style.display  = 'none';
+    document.getElementById('result-container').style.display = 'block';
+    document.getElementById('qr-data').innerText = decodedText;
+
+    const sapEl = document.getElementById('sap-result');
+    sapEl.className = 'sap-result status-sync show';
+    document.getElementById('sap-icon').innerHTML  = '<div class="spinner" style="width:15px;height:15px;border-width:2.5px;opacity:0.8"></div>';
+    document.getElementById('sap-title').textContent = 'Checking with SAP…';
+    document.getElementById('sap-msg').textContent  = '';
+    document.getElementById('sap-code').textContent = '';
+
+    const code = selectedLang?.code || 'en-IN';
+    const L    = LANG_MAP[code] || LANG_MAP['en-IN'];
+    speak(L.scanned, code);
+
+    fetch(APPS_SCRIPT_URL, {
+        method:  'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+            action:        'scan',
+            licenseNumber: driverDL,
+            driverDOB:     driverDOB,
+            qrDetails:     decodedText,
+            sapStatus:     'A',
+            uniqueNo:      window._uniqueNo,
+        })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.status === 'success') {
+            showSAPResult(data.sapStatus, data.sapMessage, code, L);
+            setTimeout(() => showTokenPopup(data, code, L), 600);
+        } else {
+            showSAPResult('E', data.message || 'Apps Script error', code, L);
+            startCountdownReset(L);
+        }
+    })
+    .catch(err => {
+        console.warn('Apps Script error:', err);
+        showSAPResult('E', 'Connection error. Please retry.', code, L);
+        startCountdownReset(L);
+    });
+}
+
+function showSAPResult(sapStatus, sapMessage, code, L) {
+    const cfg   = SAP_STATUS_CONFIG[sapStatus] || SAP_STATUS_CONFIG['E'];
+    const sapEl = document.getElementById('sap-result');
+    sapEl.className = `sap-result ${cfg.cls} show`;
+    document.getElementById('sap-icon').textContent  = cfg.icon;
+    document.getElementById('sap-title').textContent = cfg.title[code] || cfg.title['en-IN'];
+    document.getElementById('sap-msg').textContent   = L['sap' + sapStatus] || sapMessage || '';
+    document.getElementById('sap-code').textContent  = ('SAP STATUS: ' + sapStatus + '  ·  ' + (sapMessage || '')).substring(0, 100);
+}
+
+// ══════════════════════════════════════════════════════
+//  TOKEN POPUP
+// ══════════════════════════════════════════════════════
+function showTokenPopup(data, code, L) {
+    const sapStatus  = data.sapStatus  || 'E';
+    const sapMessage = data.sapMessage || '';
+    const tokenNumber= data.tokenNumber|| '';
+    const qrFields   = data.qrFields   || {};
+    const ggid       = data.ggid       || '';
+
+    const modal   = document.getElementById('token-modal');
+    const icon    = document.getElementById('token-icon');
+    const heading = document.getElementById('token-heading');
+    const sub     = document.getElementById('token-sub');
+    const btnText = document.getElementById('btn-token-ok-text');
+
+    document.getElementById('td-tokenno').textContent = tokenNumber || '—';
+    btnText.textContent = L.tokenBtn || 'Scan Next Vehicle';
+
+    if (sapStatus === 'A') {
+        modal.classList.remove('error-state');
+        icon.className = 'token-check';
+        icon.innerHTML = '✓';
+        heading.className = 'token-heading';
+        heading.textContent = L.tokenHeading || 'Entry Approved!';
+        sub.textContent = 'Result - ' + (sapMessage || L.tokenSub || 'Your access token has been generated');
+        // tokenBox.style.display = 'block';
+        // document.getElementById('token-number-display').textContent = tokenNumber;
+        // if (ggid) { ggidBox.style.display = 'block'; ggidText.textContent = ggid; }
+        // else { ggidBox.style.display = 'none'; }
+        // speak((L.tokenHeading || 'Entry Approved') + '. Token ' + tokenNumber, code);
+        speak((L.tokenHeading || 'Entry Approved') + '. Token ' + tokenNumber, code);
+        launchConfetti();
+    } else {
+        modal.classList.add('error-state');
+        icon.className = 'token-check error-icon';
+        icon.innerHTML = '✕';
+        heading.className = 'token-heading error-text';
+        heading.textContent = L.tokenDenied || 'Entry Denied!';
+        sub.textContent = 'Result - ' + (sapMessage || 'Vehicle Blocked or Error occurred.');
+        // tokenBox.style.display = 'none';
+        // ggidBox.style.display = 'none';
+        // speak((L.tokenDenied || 'Entry Denied') + '. ' + (sapMessage || ''), code);
+        speak((L.tokenDenied || 'Entry Denied') + '. ' + (sapMessage || ''), code);
+    }
+
+    document.getElementById('token-overlay').classList.add('show');
+}
+
+function closeTokenPopup() {
+    window.location.reload();
+}
+
+// ── Confetti ──────────────────────────────────────────
+const CONFETTI_COLORS = ['#c1624a','#6b8c7a','#c9a84c','#e8c4b0','#b8d4c4','#d4856e','#8faa9c'];
+
+function launchConfetti() {
+    document.querySelectorAll('.confetti-piece').forEach(el => el.remove());
+    for (let i = 0; i < 70; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        const size = 6 + Math.random() * 10;
+        el.style.cssText = [
+            `left:${Math.random() * 100}vw`,
+            `top:${-size * 2}px`,
+            `width:${size}px`,
+            `height:${size * (Math.random() > 0.5 ? 1 : 2.5)}px`,
+            `background:${CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)]}`,
+            `border-radius:${Math.random() > 0.5 ? '50%' : '2px'}`,
+            `animation-duration:${1.8 + Math.random() * 2.2}s`,
+            `animation-delay:${Math.random() * 0.9}s`,
+            `position:fixed`,
+            `pointer-events:none`,
+            `z-index:10000`,
+        ].join(';');
+        document.body.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  COUNTDOWN + RESET
+// ══════════════════════════════════════════════════════
+function startCountdownReset(L) {
+    clearTimeout(autoResetTimer);
+    clearInterval(countdownInterval);
+    const cd  = document.getElementById('reset-countdown');
+    const bar = document.getElementById('countdown-bar');
+    const lbl = document.getElementById('countdown-label');
+    cd.classList.add('show');
+    lbl.textContent = L.countdownMsg;
+    bar.style.transition = 'none';
+    bar.style.width = '100%';
+    let sec = 10;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        bar.style.transition = `width ${sec}s linear`;
+        bar.style.width = '0%';
+    }));
+    countdownInterval = setInterval(() => {
+        sec--;
+        lbl.textContent = `${L.countdownMsg} (${sec}s)`;
+        if (sec <= 0) clearInterval(countdownInterval);
+    }, 1000);
+    autoResetTimer = setTimeout(() => window.location.reload(), 10000);
+}
+
+function fullReset() {
+    clearTimeout(autoResetTimer);
+    clearInterval(countdownInterval);
+    window.location.reload();
+}
+
+// ══════════════════════════════════════════════════════
+//  VIRTUAL KEYBOARD (touch kiosk)
+// ══════════════════════════════════════════════════════
+const VK_ALNUM = [
+    ['1','2','3','4','5','6','7','8','9','0'],
+    ['Q','W','E','R','T','Y','U','I','O','P'],
+    ['A','S','D','F','G','H','J','K','L'],
+    ['Z','X','C','V','B','N','M','BACK'],
+    ['CLEAR','DONE']
+];
+const VK_NUM = [
+    ['1','2','3'],
+    ['4','5','6'],
+    ['7','8','9'],
+    ['CLEAR','0','BACK'],
+    ['DONE']
+];
+let vkMode = null;
+let dobDigits = '';
+
+function vkBuild(layout, container, doneLabel) {
+    layout.forEach(row => {
+        const r = document.createElement('div');
+        r.className = 'vk-row';
+        const wide = row.length <= 2;
+        row.forEach(k => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.setAttribute('data-key', k);
+            let cls = 'vk-key';
+            if (k.length > 1) cls += ' action';
+            if (k === 'DONE') cls += ' done';
+            if (wide) cls += ' wide';
+            b.className = cls;
+            b.textContent = k === 'BACK' ? '⌫' : k === 'CLEAR' ? 'Clear' : k === 'DONE' ? doneLabel : k;
+            r.appendChild(b);
+        });
+        container.appendChild(r);
+    });
+}
+
+window.addEventListener('load', function () {
+    vkBuild(VK_ALNUM, document.getElementById('vk-alnum'), 'Next →');
+    vkBuild(VK_NUM, document.getElementById('vk-numeric'), 'Done ✓');
+    const kb = document.getElementById('vk');
+    // keep focus on the input while keys are tapped
+    kb.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    kb.addEventListener('click', function (e) {
+        const b = e.target.closest('.vk-key');
+        if (b) vkPress(b.getAttribute('data-key'));
+    });
+});
+
+function vkOpen(mode) {
+    vkMode = mode;
+    const kb = document.getElementById('vk');
+    document.getElementById('vk-alnum').style.display   = mode === 'dl'  ? '' : 'none';
+    document.getElementById('vk-numeric').style.display = mode === 'dob' ? '' : 'none';
+    kb.classList.add('show');
+    document.body.style.paddingBottom = (kb.offsetHeight + 20) + 'px';
+    const target = document.getElementById(mode === 'dl' ? 'dl-number' : 'dob-text');
+    setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 80);
+}
+
+function vkClose() {
+    vkMode = null;
+    document.getElementById('vk').classList.remove('show');
+    document.body.style.paddingBottom = '';
+    const a = document.activeElement;
+    if (a && (a.id === 'dl-number' || a.id === 'dob-text')) a.blur();
+}
+
+function vkPress(key) {
+    if (key === 'DONE') {
+        if (vkMode === 'dl') document.getElementById('dob-text').focus();
+        else vkClose();
+        return;
+    }
+    if (vkMode === 'dl') {
+        const el = document.getElementById('dl-number');
+        if (key === 'BACK') el.value = el.value.slice(0, -1);
+        else if (key === 'CLEAR') el.value = '';
+        else el.value += key;
+        formatDL(el);
+    } else if (vkMode === 'dob') {
+        if (key === 'BACK') dobDigits = dobDigits.slice(0, -1);
+        else if (key === 'CLEAR') dobDigits = '';
+        else if (dobDigits.length < 8) dobDigits += key;
+        vkDobRefresh();
+    }
+}
+
+function vkMirrorDobState() {
+    const src = document.getElementById('dob');
+    const dst = document.getElementById('dob-text');
+    dst.classList.remove('error', 'success');
+    if (src.classList.contains('error')) dst.classList.add('error');
+    else if (src.classList.contains('success')) dst.classList.add('success');
+}
+
+function vkDobRefresh() {
+    const d = dobDigits;
+    let disp = d.substring(0, 2);
+    if (d.length > 2) disp += '/' + d.substring(2, 4);
+    if (d.length > 4) disp += '/' + d.substring(4, 8);
+    document.getElementById('dob-text').value = disp;
+
+    const dobEl = document.getElementById('dob');
+    const err   = document.getElementById('dob-error');
+    dobEl.value = '';
+    dobEl.classList.remove('error', 'success');
+    err.classList.remove('show');
+
+    if (d.length === 8) {
+        const dd = parseInt(d.substring(0, 2), 10);
+        const mm = parseInt(d.substring(2, 4), 10);
+        const yy = parseInt(d.substring(4, 8), 10);
+        const t  = new Date(yy, mm - 1, dd);
+        const ok = yy >= 1900 && t.getFullYear() === yy && t.getMonth() === mm - 1 && t.getDate() === dd;
+        if (ok) {
+            dobEl.value = d.substring(4, 8) + '-' + d.substring(2, 4) + '-' + d.substring(0, 2);
+            validateDOB();
+        } else {
+            err.textContent = 'Please enter a valid date (DD/MM/YYYY).';
+            err.classList.add('show');
+            dobEl.classList.add('error');
+        }
+    }
+    vkMirrorDobState();
+}
+
+function vkVerifyClick() {
+    vkClose();
+    const dobEl = document.getElementById('dob');
+    if (!dobEl.value) {
+        if (dobDigits.length < 8) {
+            const err = document.getElementById('dob-error');
+            err.textContent = 'Please enter your full date of birth (DD/MM/YYYY).';
+            err.classList.add('show');
+            document.getElementById('dob-text').classList.add('error');
+        }
+        return;
+    }
+    verifyDriver();
+}
+
+// ── LIVE CLOCK (header display only) ──
+window.addEventListener('load', () => {
+    setInterval(() => {
+        const now = new Date();
+        document.getElementById('kiosk-clock').textContent = now.toLocaleTimeString('en-GB', { hour12: false });
+        document.getElementById('kiosk-date').textContent = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+    }, 1000);
+});
+</script>
+</body>
+</html>
