@@ -2116,12 +2116,7 @@ function onScanSuccess(decodedText) {
     .then(r => r.json())
     .then(data => {
         if (data.status === 'success') {
-            // showSAPResult(data.sapStatus, data.sapMessage, code, L);
-            // setTimeout(() => showTokenPopup(data, code, L), 600);
             showSAPResult(data.sapStatus, data.sapMessage, code, L);
-            if (data.sapStatus === 'A' && data.tokenNumber) {
-                try { printTokenSlip(data.tokenNumber); } catch (e) { console.warn('Token print error:', e); }
-            }
             setTimeout(() => showTokenPopup(data, code, L), 600);
         } else {
             showSAPResult('E', data.message || 'Apps Script error', code, L);
@@ -2249,53 +2244,6 @@ function startCountdownReset(L) {
         if (sec <= 0) clearInterval(countdownInterval);
     }, 1000);
     autoResetTimer = setTimeout(() => window.location.reload(), 10000);
-}
-
-// ── TOKEN SLIP (thermal label printer) ──
-const TOKEN_SLIP_ENABLED  = true;   // false = never print (instant switch-off)
-const TOKEN_SLIP_W_MM     = 100;    // label width  (10 cm)
-const TOKEN_SLIP_H_MM     = 50;     // label height (5 cm)
-const TOKEN_SLIP_TITLE    = 'TOKEN NO.';
-const TOKEN_SLIP_TITLE_MM = 6;      // size of "TOKEN NO." (mm)
-const TOKEN_SLIP_NUM_MM   = 18;     // size of the token number (mm); lower it if long tokens get cut off
-const TOKEN_SLIP_TOP_MM   = 4;      // gap from the top edge to "TOKEN NO."
-const TOKEN_SLIP_DEBUG    = false;  // true = draws a red frame at the label edge for testing
-
-function printTokenSlip(token) {
-    if (!TOKEN_SLIP_ENABLED) return;
-    const safeToken = String(token).replace(/[^A-Za-z0-9-]/g, '');
-    if (!safeToken) return;
-
-    const iframe = document.createElement('iframe');
-    iframe.style.cssText = 'position:fixed; right:0; bottom:0; width:0; height:0; border:0;';
-    document.body.appendChild(iframe);
-
-    const doc = iframe.contentWindow.document;
-    doc.open();
-    doc.write(
-        '<html><head><style>' +
-        '@page{size:' + TOKEN_SLIP_W_MM + 'mm ' + TOKEN_SLIP_H_MM + 'mm; margin:0;} ' +
-        'html,body{margin:0;padding:0;width:100%;height:' + (TOKEN_SLIP_H_MM - 2) + 'mm;overflow:hidden;} ' +
-        'body{position:relative;font-family:Arial,Helvetica,sans-serif;font-weight:bold;color:#000;white-space:nowrap;' +
-        (TOKEN_SLIP_DEBUG ? 'outline:0.4mm solid red;outline-offset:-0.4mm;' : '') + '} ' +
-        '.t{position:absolute;top:' + TOKEN_SLIP_TOP_MM + 'mm;left:0;right:0;text-align:center;font-size:' + TOKEN_SLIP_TITLE_MM + 'mm;line-height:1;} ' +
-        '.n{position:absolute;top:' + (TOKEN_SLIP_H_MM / 2) + 'mm;left:0;right:0;transform:translateY(-50%);text-align:center;font-size:' + TOKEN_SLIP_NUM_MM + 'mm;line-height:1;}' +
-        '</style></head><body>' +
-        '<div class="t">' + TOKEN_SLIP_TITLE + '</div>' +
-        '<div class="n">' + safeToken + '</div>' +
-        '</body></html>'
-    );
-    doc.close();
-
-    setTimeout(() => {
-        try {
-            iframe.contentWindow.focus();
-            iframe.contentWindow.print();
-        } catch (e) {
-            console.warn('Token slip print failed:', e);
-        }
-        setTimeout(() => iframe.remove(), 10000);
-    }, 300);
 }
 
 function fullReset() {
